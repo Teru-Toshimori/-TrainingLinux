@@ -1,7 +1,9 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -g -O0
+CFLAGS = -Wall -Wextra -g -O0 -MMD -MP
 TARGET = calculator
-OBJS = main.o calc.o
+SRCS = main.c calc.c
+OBJS = $(SRCS:.c=.o)
+DEPS = $(OBJS:.o=.d)
 
 $(TARGET): $(OBJS)
 	$(CC) $^ -o $@
@@ -9,6 +11,8 @@ $(TARGET): $(OBJS)
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
+-include $(DEPS)
+
 .PHONY: clean
 clean:
-	rm -f $(TARGET) $(OBJS)
+	rm -f $(TARGET) $(OBJS) $(DEPS)
